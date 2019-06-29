@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using api.Managers;
+using api.Managers.Auth;
+using api.Managers.Seed;
 using api.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using static api.Models.MyContext;
 
 namespace api_server
 {
@@ -35,8 +32,10 @@ namespace api_server
                     .SetIsOriginAllowed(isOriginAllowed: _ => true));
             });
 
-            services.AddDbContext<TodoContext>(options =>
-                options.UseInMemoryDatabase("TodoList"));
+			services.AddTransient<IAuthManager, AuthManager>();
+            services.AddTransient<ISeedManager<User>, SeedUserManager>();
+            services.AddTransient<ISeedManager<Room>, SeedRoomManager>();
+            services.AddDbContext<MyContext>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
