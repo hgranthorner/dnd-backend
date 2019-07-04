@@ -15,8 +15,10 @@ namespace api.Managers.Seed
 
         protected override async Task<List<Room>> SeedData()
         {
-            var room = new Room { Name = "test room" };
-            Context.Rooms.Add(room);
+            var room1 = new Room { Name = "test room" };
+            var room2 = new Room { Name = "test room" };
+            var room3 = new Room { Name = "test room" };
+            Context.Rooms.AddRange(room1, room2, room3);
             Context.SaveChanges();
             return await Context.Rooms.ToListAsync();
         }

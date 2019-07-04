@@ -17,12 +17,10 @@ namespace api.Controllers
         public AuthController(IAuthManager manager) => _manager = manager;
 
         [HttpPost("login")]
-        [ProducesResponseType(typeof(IEnumerable<User>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public IActionResult Post([FromBody]User userInfo)
+        public User Post([FromBody]User userInfo)
         {
             var user = _manager.Login(userInfo);
-            return user != null ? Ok(user) : (IActionResult)Unauthorized();
+            return user;
         }
     }
 }

@@ -4,11 +4,8 @@ using api.Managers.Seed;
 using api.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using static api.Models.MyContext;
 
 namespace api_server
 {
@@ -36,7 +33,9 @@ namespace api_server
             services.AddTransient<ISeedManager<User>, SeedUserManager>();
             services.AddTransient<ISeedManager<Room>, SeedRoomManager>();
             services.AddDbContext<MyContext>();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc()
+                // .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

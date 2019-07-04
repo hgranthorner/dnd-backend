@@ -19,6 +19,7 @@
     <Folder Include="Controllers\Seed\" />
     <Folder Include="Controllers\Auth\" />
     <Folder Include="Configuration\" />
+    <Folder Include="Managers\Api\" />
   </ItemGroup>
 
   <ItemGroup>

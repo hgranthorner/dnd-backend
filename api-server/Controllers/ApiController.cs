@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using api.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +21,25 @@ namespace api.Controllers
         [HttpGet("users")]
         public Task<List<User>> GetUsers()
         {
-            return _context.Users.ToListAsync();
+            return _context.Users
+                .Include(user => user.UserRoles)
+                .ThenInclude(userRoles => userRoles.Role)
+                .ToListAsync();
+        }
+
+        [HttpGet("rooms")]
+        public async Task<List<Room>> GetRooms()
+        {
+            return await _context.Rooms
+                .ToListAsync();
+        }
+
+        [HttpGet("characters/{userId}")]
+        public async Task<List<Character>> GetCharacters(int userId)
+        {
+            return await _context.Characters
+                .Where(character => character.PlayerId == userId)
+                .ToListAsync();
         }
     }
 }

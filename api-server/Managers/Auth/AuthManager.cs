@@ -2,6 +2,7 @@
 using System.Linq;
 using api.Managers.Auth;
 using api.Models;
+using Microsoft.EntityFrameworkCore;
 using static api.Models.MyContext;
 
 namespace api.Managers
@@ -14,9 +15,12 @@ namespace api.Managers
 
         public User Login(User user)
         {
-            var users = Context.Users.Where(u => u.Username == user.Username && u.Password == user.Password);
+            var loggedInUser = Context.Users
+                .Include(u => u.UserRoles)
+                .ThenInclude(userRoles => userRoles.Role)
+                .SingleOrDefault(u => u.Username == user.Username && u.Password == user.Password);
 
-            return users?.First();
+            return loggedInUser;
         }
     }
 }
